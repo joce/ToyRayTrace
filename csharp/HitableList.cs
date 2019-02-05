@@ -25,9 +25,9 @@ namespace ToyRayTrace
             var tempRec = new HitRecord();
             var hitAnything = false;
             var closest = max;
-            foreach (var hitable in m_Hitables)
+            for (int i = 0; i < m_Hitables.Count; i++)
             {
-                if (hitable.Hit(r, min, closest, ref tempRec))
+                if (m_Hitables[i].Hit(r, min, closest, ref tempRec))
                 {
                     hitAnything = true;
                     closest = tempRec.t;
