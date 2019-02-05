@@ -36,18 +36,20 @@ namespace ToyRayTrace
 
         static readonly Vec3 k_Bluish = new Vec3(0.5f, 0.7f, 1f);
 
+        const int k_MaxDepth = 50;
+
         static Vec3 Color(in Ray r, IHitable world, int depth)
         {
             s_RaysCast++;
             var rec = new HitRecord();
             if (world.Hit(r, 0.001f, float.MaxValue, ref rec))
             {
-                if (depth < 50 && rec.material.Scatter(r, rec, out var attenuation, out var scattered))
+                if (depth < k_MaxDepth && rec.material.Scatter(r, rec, out var attenuation, out var scattered))
                 {
                     return attenuation * Color(scattered, world, depth + 1);
                 }
 
-                if (depth >= 50)
+                if (depth >= k_MaxDepth)
                 {
                     s_RaysLost++;
                 }
