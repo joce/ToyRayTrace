@@ -5,10 +5,13 @@ namespace ToyRayTrace
     public class Dielectric : IMaterial
     {
         readonly float m_RefIdx;
+        readonly float m_R0;
 
         public Dielectric(float refIdx)
         {
             m_RefIdx = refIdx;
+            m_R0 = (1.0f - m_RefIdx) / (1.0f + m_RefIdx);
+            m_R0 = m_R0 * m_R0;
         }
 
         public bool Scatter(in Ray inRay, HitRecord rec, out Vec3 attenuation, out Ray scattered)
@@ -50,9 +53,9 @@ namespace ToyRayTrace
 
         float Schlick(float cosine)
         {
-            var r0 = (1.0f - m_RefIdx) / (1.0f + m_RefIdx);
-            r0 = r0 * r0;
-            return r0 + (1.0f - r0) * MathF.Pow(1.0f - cosine, 5);
+//            var r0 = (1.0f - m_RefIdx) / (1.0f + m_RefIdx);
+//            r0 = r0 * r0;
+            return m_R0 + (1.0f - m_R0) * MathF.Pow(1.0f - cosine, 5);
         }
     }
 }
