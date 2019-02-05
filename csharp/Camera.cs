@@ -24,19 +24,19 @@ namespace ToyRayTrace
 
             m_Origin = lookFrom;
             m_LowerLeftCorner = m_Origin -
-                halfWidth * focusDistance * m_U -
-                halfHeight * focusDistance * m_V -
-                focusDistance * m_W;
-            m_Horizontal = 2f * halfWidth * focusDistance * m_U;
-            m_Vertical = 2f * halfHeight * focusDistance * m_V;
+                m_U * halfWidth * focusDistance -
+                m_V * halfHeight * focusDistance -
+                m_W * focusDistance;
+            m_Horizontal = m_U * 2f * halfWidth * focusDistance;
+            m_Vertical = m_V * 2f * halfHeight * focusDistance;
         }
 
         public Ray GetRay(float s, float t)
         {
-            var random = m_LensRadius * Rng.NextInUnitDisc();
+            var random = Rng.NextInUnitDisc() * m_LensRadius;
             var offset = m_U * random.X + m_V * random.Y;
             return new Ray(m_Origin + offset,
-                m_LowerLeftCorner + s * m_Horizontal + t * m_Vertical - m_Origin - offset);
+                m_LowerLeftCorner + m_Horizontal * s + m_Vertical * t - m_Origin - offset);
         }
     }
 }

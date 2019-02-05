@@ -57,7 +57,7 @@ namespace ToyRayTrace
 
             var unitDirection = r.Direction;
             var t = 0.5f * unitDirection.Y + 1.0f;
-            return (1f-t) * Vec3.One  + t * k_Bluish;
+            return Vec3.One * (1f-t) + k_Bluish * t;
         }
 
 #if COMPLEX_SCENE
