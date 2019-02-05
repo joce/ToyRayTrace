@@ -33,7 +33,7 @@ namespace ToyRayTrace
         static long s_RaysCast;
         static long s_RaysLost;
 
-        static Vec3 Color(Ray r, IHitable world, int depth)
+        static Vec3 Color(in Ray r, IHitable world, int depth)
         {
             s_RaysCast++;
             var rec = new HitRecord();
@@ -68,7 +68,7 @@ namespace ToyRayTrace
                 for (var b = -11; b < 11; ++b)
                 {
                     var center = new Vec3(a + 0.9f * Rng.Next(), 0.2f, b + 0.9f * Rng.Next());
-                    if ((center - new Vec3(4, 0.2f, 0)).Length() <= 0.9)
+                    if ((center - new Vec3(4, 0.2f, 0)).Length <= 0.9)
                         continue;
                     IMaterial mat;
                     var chooseMat = Rng.Next();
@@ -97,14 +97,14 @@ namespace ToyRayTrace
 #if COMPLEX_SCENE
             var lookFrom = new Vec3(13, 2, 3);
             var lookAt = new Vec3(0,0.5f,0);
-            var distToFocus = (lookFrom - lookAt).Length();
+            var distToFocus = (lookFrom - lookAt).Length;
             var aperture = 0.1f;
 
             var world = RandomScene();
 #else
             var lookFrom = new Vec3(0, 1, 3); // new Vec3(3f, 3f, 2f);
             var lookAt = new Vec3(0, 0.25f, 0f);
-            var distToFocus = 1; //(lookFrom - lookAt).Length();
+            var distToFocus = 1; //(lookFrom - lookAt).Length;
             var aperture = 0; //1f;
 
             var world = new HitableList(new []

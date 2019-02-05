@@ -6,12 +6,12 @@ namespace ToyRayTrace
     {
         readonly Vec3 m_Albedo;
 
-        public Lambertian(Vec3 albedo)
+        public Lambertian(in Vec3 albedo)
         {
             m_Albedo = albedo;
         }
 
-        public bool Scatter(Ray inRay, HitRecord rec, out Vec3 attenuation, out Ray scattered)
+        public bool Scatter(in Ray inRay, HitRecord rec, out Vec3 attenuation, out Ray scattered)
         {
             var target = rec.p + rec.normal + Rng.NextInUnitSphere();
             scattered = new Ray(rec.p, target - rec.p);

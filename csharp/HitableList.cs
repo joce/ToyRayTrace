@@ -6,7 +6,7 @@ namespace ToyRayTrace
 {
     public class HitableList : IHitable
     {
-        List<IHitable> m_Hitables;
+        readonly List<IHitable> m_Hitables;
 
         public HitableList():
             this(Enumerable.Empty<IHitable>())
@@ -20,7 +20,7 @@ namespace ToyRayTrace
 
         public void Add(IHitable hitable) => m_Hitables.Add(hitable);
 
-        public bool Hit(Ray r, float min, float max, ref HitRecord rec)
+        public bool Hit(in Ray r, float min, float max, ref HitRecord rec)
         {
             var tempRec = new HitRecord();
             var hitAnything = false;
@@ -37,6 +37,5 @@ namespace ToyRayTrace
 
             return hitAnything;
         }
-
     }
 }

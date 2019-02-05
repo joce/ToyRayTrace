@@ -4,14 +4,14 @@ namespace ToyRayTrace
 {
     public class Camera
     {
-        Vec3 m_Origin;
-        Vec3 m_LowerLeftCorner;
-        Vec3 m_Horizontal;
-        Vec3 m_Vertical;
-        float m_LensRadius;
-        Vec3 m_U, m_V, m_W; // Camera orientation
+        readonly Vec3 m_Origin;
+        readonly Vec3 m_LowerLeftCorner;
+        readonly Vec3 m_Horizontal;
+        readonly Vec3 m_Vertical;
+        readonly float m_LensRadius;
+        readonly Vec3 m_U, m_V, m_W; // Camera orientation
 
-        public Camera(Vec3 lookFrom, Vec3 lookAt, Vec3 vUp, float vFov, float aspect, float aperture = 0, float focusDistance = 1)
+        public Camera(in Vec3 lookFrom, in Vec3 lookAt, in Vec3 vUp, float vFov, float aspect, float aperture = 0, float focusDistance = 1)
         {
             m_LensRadius = aperture / 2f;
             var theta = vFov * MathF.PI / 180f;

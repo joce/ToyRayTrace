@@ -11,7 +11,7 @@ namespace ToyRayTrace
             m_RefIdx = refIdx;
         }
 
-        public bool Scatter(Ray inRay, HitRecord rec, out Vec3 attenuation, out Ray scattered)
+        public bool Scatter(in Ray inRay, HitRecord rec, out Vec3 attenuation, out Ray scattered)
         {
             Vec3 outwardNormal;
             float niOverNt;

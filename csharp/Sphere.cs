@@ -4,22 +4,22 @@ namespace ToyRayTrace
 {
     public class Sphere : IHitable
     {
-        Vec3 m_Center;
-        float m_Radius;
+        readonly Vec3 m_Center;
+        readonly float m_Radius;
         readonly IMaterial m_Material;
 
         public Sphere():
             this(new Vec3(0, 0, 0), 1f)
         {}
 
-        public Sphere(Vec3 center, float radius, IMaterial material = null)
+        public Sphere(in Vec3 center, float radius, IMaterial material = null)
         {
             m_Center = center;
             m_Radius = radius;
             m_Material = material;
         }
 
-        public bool Hit(Ray r, float min, float max, ref HitRecord rec)
+        public bool Hit(in Ray r, float min, float max, ref HitRecord rec)
         {
             var oc = r.Origin - m_Center;
             var a = Vec3.Dot(r.Direction, r.Direction);
