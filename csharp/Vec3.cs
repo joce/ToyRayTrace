@@ -10,61 +10,49 @@ namespace ToyRayTrace
         public static ref readonly Vec3 Zero => ref k_Zero;
         public static ref readonly Vec3 One => ref k_One;
 
-        readonly float[] e;
-
-        public float X => e[0];
-        public float Y => e[1];
-        public float Z => e[2];
-
-        public float R => e[0];
-        public float G => e[1];
-        public float B => e[2];
+        public readonly float x, y, z;
 
         public Vec3(float v1, float v2, float v3)
         {
-            e = new float[3];
-            e[0] = v1;
-            e[1] = v2;
-            e[2] = v3;
+            x = v1;
+            y = v2;
+            z = v3;
         }
 
         public Vec3(in Vec3 v)
         {
-            e = new float[3];
-            e[0] = v.e[0];
-            e[1] = v.e[1];
-            e[2] = v.e[2];
+            x = v.x;
+            y = v.y;
+            z = v.z;
         }
 
-        public float this[int i] => e[i];
-
-        public float Length => MathF.Sqrt(e[0] * e[0] + e[1] * e[1] + e[2] * e[2]);
-        public float SquaredLength => e[0] * e[0] + e[1] * e[1] + e[2] * e[2];
+        public float Length => MathF.Sqrt(x * x + y * y + z * z);
+        public float SquaredLength => x * x + y * y + z * z;
         public bool IsNormalized => Math.Abs(SquaredLength - 1.0f) < 0.01f;
 
         public static Vec3 operator +(in Vec3 v) => new Vec3(v);
-        public static Vec3 operator -(in Vec3 v) => new Vec3(-v.e[0], -v.e[1], -v.e[2]);
-        public static Vec3 operator +(in Vec3 a, in Vec3 b) => new Vec3(a.e[0] + b.e[0], a.e[1] + b.e[1], a.e[2] + b.e[2]);
-        public static Vec3 operator -(in Vec3 a, in Vec3 b) => new Vec3(a.e[0] - b.e[0], a.e[1] - b.e[1], a.e[2] - b.e[2]);
-        public static Vec3 operator *(in Vec3 a, in Vec3 b) => new Vec3(a.e[0] * b.e[0], a.e[1] * b.e[1], a.e[2] * b.e[2]);
-        public static Vec3 operator /(in Vec3 a, in Vec3 b) => new Vec3(a.e[0] / b.e[0], a.e[1] / b.e[1], a.e[2] / b.e[2]);
-        public static Vec3 operator *(in Vec3 v, float f) => new Vec3(v.e[0] * f, v.e[1] * f, v.e[2] * f);
-        public static Vec3 operator /(in Vec3 v, float f) => new Vec3(v.e[0] / f, v.e[1] / f, v.e[2] / f);
+        public static Vec3 operator -(in Vec3 v) => new Vec3(-v.x, -v.y, -v.z);
+        public static Vec3 operator +(in Vec3 a, in Vec3 b) => new Vec3(a.x + b.x, a.y + b.y, a.z + b.z);
+        public static Vec3 operator -(in Vec3 a, in Vec3 b) => new Vec3(a.x - b.x, a.y - b.y, a.z - b.z);
+        public static Vec3 operator *(in Vec3 a, in Vec3 b) => new Vec3(a.x * b.x, a.y * b.y, a.z * b.z);
+        public static Vec3 operator /(in Vec3 a, in Vec3 b) => new Vec3(a.x / b.x, a.y / b.y, a.z / b.z);
+        public static Vec3 operator *(in Vec3 v, float f) => new Vec3(v.x * f, v.y * f, v.z * f);
+        public static Vec3 operator /(in Vec3 v, float f) => new Vec3(v.x / f, v.y / f, v.z / f);
 
         public static Vec3 Normalize(in Vec3 v)
         {
             var k = 1 / v.Length;
-            return new Vec3(v.e[0]*k, v.e[1]*k, v.e[2]*k);
+            return new Vec3(v.x*k, v.y*k, v.z*k);
         }
 
-        public static float Dot(in Vec3 a, in Vec3 b) => a.e[0] * b.e[0] + a.e[1] * b.e[1] + a.e[2] * b.e[2];
+        public static float Dot(in Vec3 a, in Vec3 b) => a.x * b.x + a.y * b.y + a.z * b.z;
 
         public static Vec3 Cross(in Vec3 a, in Vec3 b)
         {
             return new Vec3(
-                a.e[1]*b.e[2] - a.e[2]*b.e[1],
-                -(a.e[0]*b.e[2] - a.e[2]*b.e[0]),
-                a.e[0]*b.e[1] - a.e[1]*b.e[0]);
+                a.y*b.z - a.z*b.y,
+                -(a.x*b.z - a.z*b.x),
+                a.x*b.y - a.y*b.x);
         }
 
         public static Vec3 Reflect(in Vec3 v, in Vec3 normal)

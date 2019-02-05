@@ -56,7 +56,7 @@ namespace ToyRayTrace
             }
 
             var unitDirection = r.Direction;
-            var t = 0.5f * unitDirection.Y + 1.0f;
+            var t = 0.5f * unitDirection.y + 1.0f;
             return Vec3.One * (1f-t) + k_Bluish * t;
         }
 
@@ -137,7 +137,7 @@ namespace ToyRayTrace
                         col += Color(r, world, 0);
                     }
 
-                    col = new Vec3((int)(255.99f *MathF.Sqrt(col[0]*invNs)), (int)(255.99f *MathF.Sqrt(col[1]*invNs)), (int)(255.99f *MathF.Sqrt(col[2]*invNs)));
+                    col = new Vec3((int)(255.99f *MathF.Sqrt(col.x*invNs)), (int)(255.99f *MathF.Sqrt(col.y*invNs)), (int)(255.99f *MathF.Sqrt(col.z*invNs)));
                     image[x, y] = col;
                 }
             }
@@ -150,7 +150,7 @@ namespace ToyRayTrace
                     for (var x = 0; x < nx; x++)
                     {
                         ref Vec3 col = ref image[x, y];
-                        fs.WriteLine($"{col[0]} {col[1]} {col[2]}");
+                        fs.WriteLine($"{col.x} {col.y} {col.z}");
                     }
                 }
             }
