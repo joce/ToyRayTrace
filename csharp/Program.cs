@@ -28,10 +28,13 @@ namespace ToyRayTrace
             Console.WriteLine($"Pixels where rays got lost: {s_RaysLost}");
             Console.WriteLine($"{s_RaysCast} rays cast");
             Console.WriteLine($"Avg: {s_Times.Average()}, Med: {s_Times.Median()}, Min: {s_Times.Min()}, Max: {s_Times.Max()}");
+            Console.WriteLine($"Rays/ms: {s_RaysCast/s_Times.Average()}");
         }
 
         static long s_RaysCast;
         static long s_RaysLost;
+
+        static readonly Vec3 k_Bluish = new Vec3(0.5f, 0.7f, 1f);
 
         static Vec3 Color(in Ray r, IHitable world, int depth)
         {
@@ -49,12 +52,12 @@ namespace ToyRayTrace
                     s_RaysLost++;
                 }
 
-                return new Vec3(0, 0, 0);
+                return Vec3.Zero;
             }
 
             var unitDirection = r.Direction;
             var t = 0.5f * unitDirection.Y + 1.0f;
-            return (1f-t) * new Vec3(1f, 1f, 1f)  + t * new Vec3(0.5f, 0.7f, 1f) ;
+            return (1f-t) * Vec3.One  + t * k_Bluish;
         }
 
 #if COMPLEX_SCENE
@@ -126,7 +129,7 @@ namespace ToyRayTrace
                 {
                     for (var x = 0; x < nx; x++)
                     {
-                        var col = new Vec3(0, 0, 0);
+                        var col = Vec3.Zero;
                         for (var s = 0; s < ns; s++)
                         {
                             var u = (x + Rng.Next()) / nx;

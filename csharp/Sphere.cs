@@ -9,7 +9,7 @@ namespace ToyRayTrace
         readonly IMaterial m_Material;
 
         public Sphere():
-            this(new Vec3(0, 0, 0), 1f)
+            this(Vec3.Zero, 1f)
         {}
 
         public Sphere(in Vec3 center, float radius, IMaterial material = null)

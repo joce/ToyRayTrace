@@ -5,6 +5,11 @@ namespace ToyRayTrace
 {
     public readonly struct Vec3
     {
+        static readonly Vec3 k_Zero = new Vec3(0, 0, 0);
+        static readonly Vec3 k_One = new Vec3(1, 1, 1);
+        public static ref readonly Vec3 Zero => ref k_Zero;
+        public static ref readonly Vec3 One => ref k_One;
+
         readonly float[] e;
 
         public float X => e[0];
@@ -80,7 +85,7 @@ namespace ToyRayTrace
                 Debug.Assert(refracted.IsNormalized);
                 return true;
             }
-            refracted = new Vec3(0, 0, 0);
+            refracted = Zero;
             return false;
         }
     }

@@ -36,7 +36,7 @@ namespace ToyRayTrace
             else
                 reflectProb = 1.0f;
 
-            attenuation = new Vec3(1.0f, 1.0f, 1.0f);
+            attenuation = Vec3.One;
             if (Rng.Next() < reflectProb)
             {
                 var reflected = Vec3.Reflect(inRay.Direction, rec.normal);
