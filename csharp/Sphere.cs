@@ -34,7 +34,8 @@ namespace ToyRayTrace
                 {
                     rec.t = temp;
                     rec.p = r.PointAtParameter(rec.t);
-                    rec.normal = (rec.p - m_Center) / m_Radius;
+//                    rec.normal = (rec.p - m_Center) / m_Radius;
+                    rec.normal = new Vec3((rec.p.x - m_Center.x)/m_Radius, (rec.p.y - m_Center.y)/m_Radius, (rec.p.z - m_Center.z)/m_Radius);
                     rec.material = m_Material;
                     return true;
                 }
@@ -43,7 +44,8 @@ namespace ToyRayTrace
                 {
                     rec.t = temp;
                     rec.p = r.PointAtParameter(rec.t);
-                    rec.normal = (rec.p - m_Center) / m_Radius;
+//                    rec.normal = (rec.p - m_Center) / m_Radius;
+                    rec.normal = new Vec3((rec.p.x - m_Center.x)/m_Radius, (rec.p.y - m_Center.y)/m_Radius, (rec.p.z - m_Center.z)/m_Radius);
                     rec.material = m_Material;
                     return true;
                 }

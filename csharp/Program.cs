@@ -45,14 +45,10 @@ namespace ToyRayTrace
             if (world.Hit(r, 0.001f, float.MaxValue, ref rec))
             {
                 if (depth < k_MaxDepth && rec.material.Scatter(r, rec, out var attenuation, out var scattered))
-                {
                     return attenuation * Color(scattered, world, depth + 1);
-                }
 
                 if (depth >= k_MaxDepth)
-                {
                     s_RaysLost++;
-                }
 
                 return Vec3.Zero;
             }

@@ -13,6 +13,7 @@ namespace ToyRayTrace
             Direction = Vec3.Normalize(destination);
         }
 
-        public Vec3 PointAtParameter(float t) => Origin + Direction * t;
+        //Origin + Direction * t;
+        public Vec3 PointAtParameter(float t) => new Vec3(Origin.x + Direction.x * t, Origin.y + Direction.y * t, Origin.z + Direction.z * t);
     }
 }

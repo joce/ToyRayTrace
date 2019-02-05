@@ -13,8 +13,8 @@ namespace ToyRayTrace
 
         public bool Scatter(in Ray inRay, HitRecord rec, out Vec3 attenuation, out Ray scattered)
         {
-            var target = rec.p + rec.normal + Rng.NextInUnitSphere();
-            scattered = new Ray(rec.p, target - rec.p);
+            var target = rec.normal + Rng.NextInUnitSphere();
+            scattered = new Ray(rec.p, target);
             attenuation = m_Albedo;
             return true;
         }
