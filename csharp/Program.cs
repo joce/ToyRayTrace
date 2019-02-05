@@ -95,7 +95,8 @@ namespace ToyRayTrace
         static void Write(int nx, int ny)
         {
             s_RaysCast = 0;
-            var ns = 100;
+            const float ns = 100f;
+            const float invNs = 1f / ns;
 
 #if COMPLEX_SCENE
             var lookFrom = new Vec3(13, 2, 3);
@@ -122,6 +123,25 @@ namespace ToyRayTrace
 
             var camera = new Camera(lookFrom, lookAt, new Vec3(0, 1, 0), 20, ((float)nx)/ny, aperture, distToFocus);
 
+            var image = new Vec3[nx,ny];
+            for (var y = 0; y < ny; y++)
+            {
+                for (var x = 0; x < nx; x++)
+                {
+                    var col = Vec3.Zero;
+                    for (var s = 0; s < ns; s++)
+                    {
+                        var u = (x + Rng.Next()) / nx;
+                        var v = (y + Rng.Next()) / ny;
+                        var r = camera.GetRay(u, v);
+                        col += Color(r, world, 0);
+                    }
+
+                    col = new Vec3((int)(255.99f *MathF.Sqrt(col[0]*invNs)), (int)(255.99f *MathF.Sqrt(col[1]*invNs)), (int)(255.99f *MathF.Sqrt(col[2]*invNs)));
+                    image[x, y] = col;
+                }
+            }
+
             using (var fs = new StreamWriter(@"c:\dump\backgroundHitables.ppm"))
             {
                 fs.WriteLine($"P3\n{nx} {ny}\n255");
@@ -129,22 +149,8 @@ namespace ToyRayTrace
                 {
                     for (var x = 0; x < nx; x++)
                     {
-                        var col = Vec3.Zero;
-                        for (var s = 0; s < ns; s++)
-                        {
-                            var u = (x + Rng.Next()) / nx;
-                            var v = (y + Rng.Next()) / ny;
-                            var r = camera.GetRay(u, v);
-                            col += Color(r, world, 0);
-                        }
-
-                        col /= (float)ns;
-                        col = new Vec3(MathF.Sqrt(col[0]), MathF.Sqrt(col[1]), MathF.Sqrt(col[2]));
-                        var ir = (int)(255.99f * col[0]);
-                        var ig = (int)(255.99f * col[1]);
-                        var ib = (int)(255.99f * col[2]);
-
-                        fs.WriteLine($"{ir} {ig} {ib}");
+                        ref Vec3 col = ref image[x, y];
+                        fs.WriteLine($"{col[0]} {col[1]} {col[2]}");
                     }
                 }
             }
