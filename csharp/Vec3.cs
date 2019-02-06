@@ -1,3 +1,4 @@
+#if false
 using System;
 using System.Diagnostics;
 
@@ -77,3 +78,4 @@ namespace ToyRayTrace
         }
     }
 }
+#endif

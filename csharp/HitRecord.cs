@@ -1,12 +1,13 @@
 using System;
+using System.Numerics;
 
 namespace ToyRayTrace
 {
     public struct HitRecord
     {
         public float t;
-        public Vec3 p;
-        public Vec3 normal;
+        public Vector3 p;
+        public Vector3 normal;
         public IMaterial material;
     }
 }

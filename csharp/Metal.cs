@@ -1,24 +1,25 @@
 using System;
+using System.Numerics;
 
 namespace ToyRayTrace
 {
     public struct Metal : IMaterial
     {
-        readonly Vec3 m_Albedo;
+        readonly Vector3 m_Albedo;
         readonly float m_Fuzziness;
 
-        public Metal(in Vec3 albedo, float fuzziness = 0)
+        public Metal(in Vector3 albedo, float fuzziness = 0)
         {
             m_Albedo = albedo;
             m_Fuzziness = fuzziness < 0 ? 0 : fuzziness > 1 ? 1 : fuzziness;
         }
 
-        public bool Scatter(in Ray inRay, HitRecord rec, ref uint state, out Vec3 attenuation, out Ray scattered)
+        public bool Scatter(in Ray inRay, HitRecord rec, ref uint state, out Vector3 attenuation, out Ray scattered)
         {
-            var reflected = Vec3.Reflect(inRay.Direction, rec.normal);
+            var reflected = Vector3.Reflect(inRay.Direction, rec.normal);
             scattered = new Ray(rec.p, reflected + Rng.NextInUnitSphere(ref state) * m_Fuzziness);
             attenuation = m_Albedo;
-            return Vec3.Dot(scattered.Direction, rec.normal) > 0;
+            return Vector3.Dot(scattered.Direction, rec.normal) > 0;
         }
     }
 }

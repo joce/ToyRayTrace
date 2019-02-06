@@ -1,26 +1,27 @@
 using System;
+using System.Numerics;
 
 namespace ToyRayTrace
 {
     public readonly struct Camera
     {
-        readonly Vec3 m_Origin;
-        readonly Vec3 m_LowerLeftCorner;
-        readonly Vec3 m_Horizontal;
-        readonly Vec3 m_Vertical;
+        readonly Vector3 m_Origin;
+        readonly Vector3 m_LowerLeftCorner;
+        readonly Vector3 m_Horizontal;
+        readonly Vector3 m_Vertical;
         readonly float m_LensRadius;
-        readonly Vec3 m_U, m_V, m_W; // Camera orientation
+        readonly Vector3 m_U, m_V, m_W; // Camera orientation
 
-        public Camera(in Vec3 lookFrom, in Vec3 lookAt, in Vec3 vUp, float vFov, float aspect, float aperture = 0, float focusDistance = 1)
+        public Camera(in Vector3 lookFrom, in Vector3 lookAt, in Vector3 vUp, float vFov, float aspect, float aperture = 0, float focusDistance = 1)
         {
             m_LensRadius = aperture / 2f;
             var theta = vFov * MathF.PI / 180f;
             var halfHeight = MathF.Tan(theta / 2f);
             var halfWidth = aspect * halfHeight;
 
-            m_W = Vec3.Normalize(lookFrom - lookAt);
-            m_U = Vec3.Normalize(Vec3.Cross(vUp, m_W));
-            m_V = Vec3.Cross(m_W, m_U);
+            m_W = Vector3.Normalize(lookFrom - lookAt);
+            m_U = Vector3.Normalize(Vector3.Cross(vUp, m_W));
+            m_V = Vector3.Cross(m_W, m_U);
 
             m_Origin = lookFrom;
             m_LowerLeftCorner = m_Origin -
@@ -34,7 +35,7 @@ namespace ToyRayTrace
         public Ray GetRay(float s, float t, ref uint state)
         {
             var random = Rng.NextInUnitDisc(ref state) * m_LensRadius;
-            var offset = m_U * random.x + m_V * random.y;
+            var offset = m_U * random.X + m_V * random.Y;
             return new Ray(m_Origin + offset,
                 m_LowerLeftCorner + m_Horizontal * s + m_Vertical * t - m_Origin - offset);
         }

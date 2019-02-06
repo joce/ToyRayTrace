@@ -1,19 +1,20 @@
 using System;
+using System.Numerics;
 
 namespace ToyRayTrace
 {
     public readonly struct Ray
     {
-        public Vec3 Origin { get; }
-        public Vec3 Direction { get; }
+        public Vector3 Origin { get; }
+        public Vector3 Direction { get; }
 
-        public Ray(in Vec3 origin, in Vec3 destination)
+        public Ray(in Vector3 origin, in Vector3 destination)
         {
             Origin = origin;
-            Direction = Vec3.Normalize(destination);
+            Direction = Vector3.Normalize(destination);
         }
 
         //Origin + Direction * t;
-        public Vec3 PointAtParameter(float t) => new Vec3(Origin.x + Direction.x * t, Origin.y + Direction.y * t, Origin.z + Direction.z * t);
+        public Vector3 PointAtParameter(float t) => new Vector3(Origin.X + Direction.X * t, Origin.Y + Direction.Y * t, Origin.Z + Direction.Z * t);
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,28 +26,28 @@ namespace ToyRayTrace
 #if COMPLEX_SCENE
             var world = RandomScene();
 
-            var lookFrom = new Vec3(13, 2, 3);
-            var lookAt = new Vec3(0,0.5f,0);
-            var distToFocus = (lookFrom - lookAt).Length;
+            var lookFrom = new Vector3(13, 2, 3);
+            var lookAt = new Vector3(0,0.5f,0);
+            var distToFocus = (lookFrom - lookAt).Length();
             var aperture = 0.1f;
 
 #else
             var world = new HitableList(new []
             {
-                new Sphere(new Vec3(0, 0, -1), 0.5f, new Lambertian(new Vec3(0.8f, 0.3f, 0.3f))),
-                new Sphere(new Vec3(0, -100.5f, -1), 100f, new Lambertian(new Vec3(0.8f, 0.8f, 0))),
-                new Sphere(new Vec3(1, 0, -1), 0.5f, new Metal(new Vec3(0.8f, 0.6f, 0.2f), 0.2f)),
-                new Sphere(new Vec3(-1, 0, -1), 0.5f, new Dielectric(1.5f)),
-                new Sphere(new Vec3(-1, 0, -1), -0.45f, new Dielectric(1.5f)),
+                new Sphere(new Vector3(0, 0, -1), 0.5f, new Lambertian(new Vector3(0.8f, 0.3f, 0.3f))),
+                new Sphere(new Vector3(0, -100.5f, -1), 100f, new Lambertian(new Vector3(0.8f, 0.8f, 0))),
+                new Sphere(new Vector3(1, 0, -1), 0.5f, new Metal(new Vector3(0.8f, 0.6f, 0.2f), 0.2f)),
+                new Sphere(new Vector3(-1, 0, -1), 0.5f, new Dielectric(1.5f)),
+                new Sphere(new Vector3(-1, 0, -1), -0.45f, new Dielectric(1.5f)),
             });
 
-            var lookFrom = new Vec3(0, 1, 3); // new Vec3(3f, 3f, 2f);
-            var lookAt = new Vec3(0, 0.25f, 0f);
+            var lookFrom = new Vector3(0, 1, 3); // new Vector3(3f, 3f, 2f);
+            var lookAt = new Vector3(0, 0.25f, 0f);
             var distToFocus = 1; //(lookFrom - lookAt).Length;
             var aperture = 0; //1f;
 #endif
 
-            var camera = new Camera(lookFrom, lookAt, new Vec3(0, 1, 0), 20, ((float)imageWidth)/imageHeight, aperture, distToFocus);
+            var camera = new Camera(lookFrom, lookAt, new Vector3(0, 1, 0), 20, ((float)imageWidth)/imageHeight, aperture, distToFocus);
 
             for (var i = 0; i < 1; i++)
             {
@@ -63,11 +64,11 @@ namespace ToyRayTrace
 
         static long s_RaysCast;
 
-        static readonly Vec3 k_Bluish = new Vec3(0.5f, 0.7f, 1f);
+        static readonly Vector3 k_Bluish = new Vector3(0.5f, 0.7f, 1f);
 
         const int k_MaxDepth = 50;
 
-        static Vec3 Trace(in Ray r, IHitable world, ref int depth, ref uint state)
+        static Vector3 Trace(in Ray r, IHitable world, ref int depth, ref uint state)
         {
             depth++;
             var rec = new HitRecord();
@@ -78,58 +79,58 @@ namespace ToyRayTrace
                     return attenuation * Trace(scattered, world, ref depth, ref state);
                 }
 
-                return Vec3.Zero;
+                return Vector3.Zero;
             }
 
             var unitDirection = r.Direction;
-            var t = 0.5f * unitDirection.y + 1.0f;
-            return Vec3.One * (1f-t) + k_Bluish * t;
+            var t = 0.5f * unitDirection.Y + 1.0f;
+            return Vector3.One * (1f-t) + k_Bluish * t;
         }
 
 #if COMPLEX_SCENE
         static IHitable RandomScene()
         {
             var hitables = new HitableList();
-            hitables.Add(new Sphere(new Vec3(0, -1000, 0), 1000, new Lambertian(new Vec3(0.5f, 0.5f, 0.5f))));
+            hitables.Add(new Sphere(new Vector3(0, -1000, 0), 1000, new Lambertian(new Vector3(0.5f, 0.5f, 0.5f))));
 
             for (var a = -11; a < 11; ++a)
             {
                 for (var b = -11; b < 11; ++b)
                 {
-                    var center = new Vec3(a + 0.9f * Rng.Next(), 0.2f, b + 0.9f * Rng.Next());
-                    if ((center - new Vec3(4, 0.2f, 0)).Length <= 0.9)
+                    var center = new Vector3(a + 0.9f * Rng.Next(), 0.2f, b + 0.9f * Rng.Next());
+                    if ((center - new Vector3(4, 0.2f, 0)).Length() <= 0.9)
                         continue;
                     IMaterial mat;
                     var chooseMat = Rng.Next();
                     if (chooseMat < 0.8f)
-                        mat = new Lambertian(new Vec3(Rng.Next()*Rng.Next(), Rng.Next()*Rng.Next(), Rng.Next()*Rng.Next()));
+                        mat = new Lambertian(new Vector3(Rng.Next()*Rng.Next(), Rng.Next()*Rng.Next(), Rng.Next()*Rng.Next()));
                     else if (chooseMat < 0.95f)
-                        mat = new Metal(new Vec3(0.5f*(1+Rng.Next()), 0.5f*(1+Rng.Next()), 0.5f*(1+Rng.Next())), 0.5f*Rng.Next());
+                        mat = new Metal(new Vector3(0.5f*(1+Rng.Next()), 0.5f*(1+Rng.Next()), 0.5f*(1+Rng.Next())), 0.5f*Rng.Next());
                     else
                         mat = new Dielectric(1.5f);
                     hitables.Add(new Sphere(center, 0.2f, mat));
                 }
             }
 
-            hitables.Add(new Sphere(new Vec3(0, 1, 0), 1, new Dielectric(1.5f)));
-            hitables.Add(new Sphere(new Vec3(-4, 1, 0), 1, new Lambertian(new Vec3(0.4f, 0.2f, 0.1f))));
-            hitables.Add(new Sphere(new Vec3(4, 1, 0), 1, new Metal(new Vec3(0.7f, 0.6f, 0.5f))));
+            hitables.Add(new Sphere(new Vector3(0, 1, 0), 1, new Dielectric(1.5f)));
+            hitables.Add(new Sphere(new Vector3(-4, 1, 0), 1, new Lambertian(new Vector3(0.4f, 0.2f, 0.1f))));
+            hitables.Add(new Sphere(new Vector3(4, 1, 0), 1, new Metal(new Vector3(0.7f, 0.6f, 0.5f))));
             return hitables;
         }
 #endif
 
-        static int RenderLine(int imageWidth, int imageHeight, int lineIdx, IHitable world, in Camera camera, out Vec3[] line)
+        static int RenderLine(int imageWidth, int imageHeight, int lineIdx, IHitable world, in Camera camera, out Vector3[] line)
         {
             const float ns = 100f;
             const float invNs = 1f / ns;
 
-            line = new Vec3[imageWidth];
+            line = new Vector3[imageWidth];
             int rayCount = 0;
             int frameCount = 1; // Until we have frames...
             uint state = (uint)(lineIdx * 9781 + frameCount * 6271) | 1;
             for (var x = 0; x < imageWidth; x++)
             {
-                var col = Vec3.Zero;
+                var col = Vector3.Zero;
                 for (var s = 0; s < ns; s++)
                 {
                     var u = (x + Rng.Next(ref state)) / imageWidth;
@@ -140,7 +141,7 @@ namespace ToyRayTrace
                     rayCount += rayDepth;
                 }
 
-                col = new Vec3((int)(255.99f *MathF.Sqrt(col.x*invNs)), (int)(255.99f *MathF.Sqrt(col.y*invNs)), (int)(255.99f *MathF.Sqrt(col.z*invNs)));
+                col = new Vector3((int)(255.99f *MathF.Sqrt(col.X*invNs)), (int)(255.99f *MathF.Sqrt(col.Y*invNs)), (int)(255.99f *MathF.Sqrt(col.Z*invNs)));
                 line[x] = col;
             }
 
@@ -151,7 +152,7 @@ namespace ToyRayTrace
         {
             s_RaysCast = 0;
 
-            var image = new Vec3[imageHeight][];
+            var image = new Vector3[imageHeight][];
 
             Parallel.For(0, imageHeight,
                 () => 0,
@@ -165,8 +166,8 @@ namespace ToyRayTrace
                 {
                     for (var x = 0; x < imageWidth; x++)
                     {
-                        ref Vec3 col = ref image[y][x];
-                        fs.WriteLine($"{col.x} {col.y} {col.z}");
+                        ref Vector3 col = ref image[y][x];
+                        fs.WriteLine($"{col.X} {col.Y} {col.Z}");
                     }
                 }
             }

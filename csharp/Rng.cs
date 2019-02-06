@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 
 namespace ToyRayTrace
@@ -38,24 +39,24 @@ namespace ToyRayTrace
         }
 #endif
 
-        public static Vec3 NextInUnitSphere(ref uint state)
+        public static Vector3 NextInUnitSphere(ref uint state)
         {
-            Vec3 p;
+            Vector3 p;
             do
             {
-                p = new Vec3(2 * Next(ref state) - 1, 2 * Next(ref state) - 1, 2 * Next(ref state) - 1);
-            } while (p.SquaredLength >= 1f);
+                p = new Vector3(2 * Next(ref state) - 1, 2 * Next(ref state) - 1, 2 * Next(ref state) - 1);
+            } while (p.LengthSquared() >= 1f);
 
             return p;
         }
 
-        public static Vec3 NextInUnitDisc(ref uint state)
+        public static Vector3 NextInUnitDisc(ref uint state)
         {
-            Vec3 p;
+            Vector3 p;
             do
             {
-                p = new Vec3(2 * Next(ref state) - 1, 2 * Next(ref state) - 1, 0);
-            } while (p.SquaredLength >= 1f);
+                p = new Vector3(2 * Next(ref state) - 1, 2 * Next(ref state) - 1, 0);
+            } while (p.LengthSquared() >= 1f);
 
             return p;
         }
