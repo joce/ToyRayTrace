@@ -2,7 +2,7 @@ using System;
 
 namespace ToyRayTrace
 {
-    public class Camera
+    public readonly struct Camera
     {
         readonly Vec3 m_Origin;
         readonly Vec3 m_LowerLeftCorner;
@@ -31,9 +31,9 @@ namespace ToyRayTrace
             m_Vertical = m_V * 2f * halfHeight * focusDistance;
         }
 
-        public Ray GetRay(float s, float t)
+        public Ray GetRay(float s, float t, ref uint state)
         {
-            var random = Rng.NextInUnitDisc() * m_LensRadius;
+            var random = Rng.NextInUnitDisc(ref state) * m_LensRadius;
             var offset = m_U * random.x + m_V * random.y;
             return new Ray(m_Origin + offset,
                 m_LowerLeftCorner + m_Horizontal * s + m_Vertical * t - m_Origin - offset);

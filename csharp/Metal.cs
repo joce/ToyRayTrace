@@ -13,10 +13,10 @@ namespace ToyRayTrace
             m_Fuzziness = fuzziness < 0 ? 0 : fuzziness > 1 ? 1 : fuzziness;
         }
 
-        public bool Scatter(in Ray inRay, HitRecord rec, out Vec3 attenuation, out Ray scattered)
+        public bool Scatter(in Ray inRay, HitRecord rec, ref uint state, out Vec3 attenuation, out Ray scattered)
         {
             var reflected = Vec3.Reflect(inRay.Direction, rec.normal);
-            scattered = new Ray(rec.p, reflected + Rng.NextInUnitSphere() * m_Fuzziness);
+            scattered = new Ray(rec.p, reflected + Rng.NextInUnitSphere(ref state) * m_Fuzziness);
             attenuation = m_Albedo;
             return Vec3.Dot(scattered.Direction, rec.normal) > 0;
         }

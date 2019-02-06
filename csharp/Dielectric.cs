@@ -14,7 +14,7 @@ namespace ToyRayTrace
             m_R0 = m_R0 * m_R0;
         }
 
-        public bool Scatter(in Ray inRay, HitRecord rec, out Vec3 attenuation, out Ray scattered)
+        public bool Scatter(in Ray inRay, HitRecord rec, ref uint state, out Vec3 attenuation, out Ray scattered)
         {
             Vec3 outwardNormal;
             float niOverNt;
@@ -40,7 +40,7 @@ namespace ToyRayTrace
                 reflectProb = 1.0f;
 
             attenuation = Vec3.One;
-            if (Rng.Next() < reflectProb)
+            if (Rng.Next(ref state) < reflectProb)
             {
                 var reflected = Vec3.Reflect(inRay.Direction, rec.normal);
                 scattered = new Ray(rec.p, reflected);
