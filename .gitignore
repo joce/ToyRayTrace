@@ -1,6 +1,9 @@
 **/.idea
-**/bin
-**/obj
 **/*.un~
 **/*.DotSettings.user
 
+csharp/bin
+csharp/obj
+
+rust/target
+rust/**/*.rs.bk
